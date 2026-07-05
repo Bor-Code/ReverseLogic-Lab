@@ -1,0 +1,17 @@
+# Ghidra project files
+*.gpr
+*.rep/
+*.gar
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Build/debug files
+*.o
+*.obj
+*.pdb
+*.ilk
+
+# VS Code local settings
+.vscode/
