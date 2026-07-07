@@ -12,6 +12,8 @@ Desktop.ini
 *.obj
 *.pdb
 *.ilk
+*.log
+*.exe
 
 # VS Code local settings
 .vscode/
