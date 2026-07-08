@@ -179,6 +179,18 @@ The final `'\0'` byte is important because C strings must end with a null termin
 
 ---
 
+## x64dbg Dynamic Analysis
+
+The binary was also checked with x64dbg to confirm the runtime behavior of the password comparison.
+
+A breakpoint was placed on the `call strcmp` instruction inside the program code. This is the point where the user input is compared with the runtime-decoded password.
+
+At the breakpoint, the register values showed that both comparison arguments contained `bora123`.
+
+This confirms that the encoded password was decoded in memory before the comparison.
+
+The important observation is that the password is not stored as a plain string in the binary. It becomes visible only during runtime after the `decode_password` function finishes.
+
 ## Reverse Engineering Idea
 
 In Lab 01, the password was easy to find because it was stored as a readable string.
@@ -235,6 +247,12 @@ The executable rejects an incorrect password.
 The executable accepts the decoded password `bora123`.
 
 ![Correct password test](screenshots/04-correct-password-test.png)
+
+### x64dbg strcmp runtime breakpoint
+
+The debugger stopped at the `strcmp` call. The register view shows that both comparison arguments contain `bora123`.
+
+![x64dbg strcmp runtime breakpoint](screenshots/05-x64dbg-strcmp-runtime.png)
 
 ## Final Conclusion
 
