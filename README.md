@@ -1,23 +1,26 @@
 # ReverseLogic-Lab
 
-ReverseLogic-Lab is an educational reverse engineering project focused on understanding how simple program logic appears inside compiled binaries.
+ReverseLogic-Lab is an educational reverse engineering project focused on understanding how simple program logic appears inside compiled Windows binaries.
 
-The goal of this project is not to crack real software.  
-The goal is to learn how compiled programs represent conditions, strings, function calls, user input, and decision logic.
+The goal of this project is not to crack real software.
 
-This project uses small C programs, compiled Windows executables, Ghidra analysis, and step-by-step write-ups.
+The goal is to learn how compiled programs represent conditions, strings, function calls, user input, Windows API calls, and basic anti-analysis behavior.
+
+This repository uses small C programs, compiled Windows executables, Ghidra analysis, runtime testing, screenshots, and step-by-step write-ups.
 
 ---
 
 ## Project Purpose
 
-This repository demonstrates the basic reverse engineering workflow:
+This repository demonstrates a basic reverse engineering workflow:
 
 ```text
-Source Code → Compiled Binary → Strings → Functions → Decompiler Output → Program Logic
+Source Code -> Compiled Binary -> Runtime Test -> Static Analysis -> Documentation
 ```
 
-Each lab contains a small program and an analysis document explaining how the logic can be recovered from the binary.
+Each lab contains a small C program and an analysis document explaining how the logic can be recovered from the binary.
+
+The project is designed for learning and portfolio purposes.
 
 ---
 
@@ -28,6 +31,7 @@ The project uses:
 - C
 - GCC / MinGW through MSYS2
 - Ghidra
+- x64dbg
 - Windows executables
 - Markdown documentation
 - Git and GitHub
@@ -40,16 +44,14 @@ The project uses:
 
 This lab demonstrates how a simple password check can be identified inside a compiled executable.
 
-The program asks the user for a password and compares the entered value with a hardcoded password.
-
-Important concepts:
+Main concepts:
 
 - user input
-- string comparison
+- hardcoded password
 - `strcmp`
-- hardcoded strings
+- visible strings
+- basic if/else logic
 - Ghidra decompiler output
-- basic if/else decision logic
 
 Lab folder:
 
@@ -57,31 +59,89 @@ Lab folder:
 labs/01-simple-password/
 ```
 
-Files:
+---
+
+### Lab 02 - XOR Encoded String
+
+This lab demonstrates how a password can be hidden using a simple XOR encoding technique.
+
+Main concepts:
+
+- encoded byte arrays
+- XOR key
+- runtime decoding
+- `strcmp` with a decoded buffer
+- Ghidra static analysis
+- x64dbg runtime verification
+
+Lab folder:
 
 ```text
-source.c
-simple_password.exe
-analysis.md
+labs/02-xor-encoded-string/
 ```
 
 ---
 
-## Lab 01 Summary
+### Lab 03 - Stack Strings
 
-The original program contains this logic:
+This lab demonstrates how a password can be built character by character at runtime instead of being stored as a normal string.
 
-```c
-if (strcmp(input, "bora123") == 0) {
-    printf("Access granted\n");
-} else {
-    printf("Access denied\n");
-}
+Main concepts:
+
+- stack strings
+- local character buffers
+- character-by-character writes
+- ASCII hex values
+- hidden runtime string creation
+- Ghidra function analysis
+
+Lab folder:
+
+```text
+labs/03-stack-strings/
 ```
 
-After compiling and opening the executable in Ghidra, the same logic can be recovered from the decompiler output.
+---
 
-This shows that even when the source code is not available, strings and function calls can reveal important information about program behavior.
+### Lab 04 - Anti-Debugging Check
+
+This lab demonstrates a simple Windows anti-debugging check using `IsDebuggerPresent`.
+
+Main concepts:
+
+- Windows API usage
+- `IsDebuggerPresent`
+- imported API analysis
+- conditional behavior based on debugger detection
+- Ghidra import and control flow analysis
+
+Lab folder:
+
+```text
+labs/04-anti-debugging/
+```
+
+---
+
+### Lab 05 - Windows API Behavior
+
+This lab demonstrates basic Windows API behavior analysis.
+
+Main concepts:
+
+- imported Windows APIs
+- `GetComputerNameA`
+- `GetWindowsDirectoryA`
+- `GetSystemDirectoryA`
+- `GetCurrentProcessId`
+- system information collection
+- behavior analysis through API usage
+
+Lab folder:
+
+```text
+labs/05-windows-api-behavior/
+```
 
 ---
 
@@ -93,9 +153,29 @@ ReverseLogic-Lab/
 ├── README.md
 │
 ├── labs/
-│   └── 01-simple-password/
+│   │
+│   ├── 01-simple-password/
+│   │   ├── source.c
+│   │   ├── analysis.md
+│   │   └── screenshots/
+│   │
+│   ├── 02-xor-encoded-string/
+│   │   ├── source.c
+│   │   ├── analysis.md
+│   │   └── screenshots/
+│   │
+│   ├── 03-stack-strings/
+│   │   ├── source.c
+│   │   ├── analysis.md
+│   │   └── screenshots/
+│   │
+│   ├── 04-anti-debugging/
+│   │   ├── source.c
+│   │   ├── analysis.md
+│   │   └── screenshots/
+│   │
+│   └── 05-windows-api-behavior/
 │       ├── source.c
-│       ├── simple_password.exe
 │       ├── analysis.md
 │       └── screenshots/
 │
@@ -104,61 +184,65 @@ ReverseLogic-Lab/
 └── docs/
 ```
 
----
-
-## How to Build Lab 01
-
-Go to the lab folder:
-
-```bash
-cd labs/01-simple-password
-```
-
-Compile the source code:
-
-```bash
-gcc source.c -o simple_password.exe
-```
-
-Run the program:
-
-```bash
-./simple_password.exe
-```
-
-Example output:
-
-```text
-Enter password:
-```
-
-If the correct password is entered:
-
-```text
-Access granted
-```
-
-If the wrong password is entered:
-
-```text
-Access denied
-```
+Compiled `.exe` files are not tracked in Git. They are ignored through `.gitignore`.
 
 ---
 
-## Reverse Engineering Workflow
+## General Lab Workflow
 
-The basic workflow used in this project is:
+The workflow used in this repository is:
 
 1. Write a small C program.
 2. Compile it into a Windows executable.
-3. Open the executable in Ghidra.
-4. Run auto-analysis.
-5. Search for useful strings.
-6. Find the function that references those strings.
-7. Read the decompiler output.
-8. Identify the decision logic.
-9. Document the analysis.
+3. Run the program and capture runtime behavior.
+4. Open the executable in Ghidra.
+5. Run auto-analysis.
+6. Inspect strings, functions, imports, and control flow.
+7. Compare source logic with decompiled logic.
+8. Capture screenshots.
+9. Write an analysis document.
+10. Open a pull request and merge through the normal GitHub flow.
+
+---
+
+## Build Example
+
+Each lab can be built with GCC through MSYS2 MinGW64.
+
+Example:
+
+```bash
+gcc -Wall -Wextra -O0 -g labs/05-windows-api-behavior/source.c -o labs/05-windows-api-behavior/windows_api_behavior.exe
+```
+
+Run example:
+
+```bash
+./labs/05-windows-api-behavior/windows_api_behavior.exe
+```
+
+The exact executable name changes depending on the lab.
+
+---
+
+## Reverse Engineering Concepts Covered
+
+This repository currently covers:
+
+- hardcoded string comparison
+- password checking logic
+- `strcmp`
+- XOR encoded strings
+- runtime decoding
+- stack strings
+- local buffers
+- ASCII and hex character values
+- Windows API imports
+- `IsDebuggerPresent`
+- basic anti-debugging behavior
+- behavior analysis through imported APIs
+- Ghidra decompiler analysis
+- x64dbg runtime inspection
 
 ---
 
@@ -168,11 +252,12 @@ This project is for learning and portfolio purposes.
 
 It focuses on:
 
-- understanding binaries
+- understanding compiled binaries
 - reading decompiled code
 - identifying string references
 - recognizing simple control flow
-- explaining reverse engineering logic clearly
+- analyzing imported APIs
+- documenting reverse engineering findings clearly
 
 This project does not target real commercial software and does not include illegal cracking activity.
 
@@ -184,13 +269,32 @@ Current status:
 
 ```text
 Lab 01 completed
-More labs planned
+Lab 02 completed
+Lab 03 completed
+Lab 04 completed
+Lab 05 completed
 ```
 
-Planned future labs:
+More labs will be added as the reverse engineering roadmap progresses.
 
-- XOR encoded string
-- switch-case logic
-- simple license key check
-- basic anti-debugging logic
-- control flow graph notes
+---
+
+## Git Workflow
+
+All changes are developed through feature or documentation branches.
+
+The expected workflow is:
+
+```text
+main -> feature branch -> pull request -> squash and merge -> main
+```
+
+Commit messages follow the conventional commit format.
+
+Examples:
+
+```text
+feat: add stack strings lab
+docs: add xor dynamic analysis
+docs: update reverse logic lab readme
+```
