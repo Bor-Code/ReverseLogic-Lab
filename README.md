@@ -8,6 +8,13 @@ The project follows a simple workflow:
 Source Code -> Compiled Binary -> Runtime Test -> Ghidra Analysis -> Documentation -> Pull Request
 ```
 
+<div align="center">
+  
+# 🚨 WARNING 🚨
+**🔴 PLEASE USE GHIDRA AND X64DBG TOOLS FOR EDUCATIONAL PURPOSES ONLY. 🔴**
+
+</div>
+
 The goal is not to crack real software.
 
 The goal is to learn how compiled programs represent strings, function calls, command-line arguments, control flow, encoded data, checksum logic, and Windows API behavior.
