@@ -4,9 +4,9 @@ ReverseLogic-Lab is an educational reverse engineering project focused on unders
 
 The goal of this project is not to crack real software.
 
-The goal is to learn how compiled programs represent conditions, strings, function calls, user input, Windows API calls, and basic anti-analysis behavior.
+The goal is to learn how compiled programs represent conditions, strings, function calls, command-line arguments, user input, Windows API calls, control flow, encoded data, and basic anti-analysis behavior.
 
-This repository uses small C programs, compiled Windows executables, Ghidra analysis, runtime testing, screenshots, and step-by-step write-ups.
+This repository uses small C programs, compiled Windows executables, Ghidra analysis, runtime testing, screenshots, Markdown documentation, Git, and GitHub pull requests.
 
 ---
 
@@ -20,7 +20,7 @@ Source Code -> Compiled Binary -> Runtime Test -> Static Analysis -> Documentati
 
 Each lab contains a small C program and an analysis document explaining how the logic can be recovered from the binary.
 
-The project is designed for learning and portfolio purposes.
+The project is designed for learning, documentation practice, and portfolio development.
 
 ---
 
@@ -33,8 +33,10 @@ The project uses:
 - Ghidra
 - x64dbg
 - Windows executables
+- Windows API
 - Markdown documentation
 - Git and GitHub
+- Pull request based workflow
 
 ---
 
@@ -70,7 +72,8 @@ Main concepts:
 - encoded byte arrays
 - XOR key
 - runtime decoding
-- `strcmp` with a decoded buffer
+- decoded buffers
+- `strcmp` with a decoded string
 - Ghidra static analysis
 - x64dbg runtime verification
 
@@ -145,6 +148,116 @@ labs/05-windows-api-behavior/
 
 ---
 
+### Lab 06 - Command-Line Password
+
+This lab demonstrates how a password can be validated through command-line arguments.
+
+Main concepts:
+
+- `argc`
+- `argv`
+- command-line input
+- `argv[1]`
+- `strcmp`
+- usage messages
+- Ghidra argument analysis
+
+Lab folder:
+
+```text
+labs/06-command-line-password/
+```
+
+---
+
+### Lab 07 - License Key Pattern
+
+This lab demonstrates how a fixed license key pattern can be validated through multiple smaller checks.
+
+Main concepts:
+
+- command-line key input
+- `strlen`
+- `strncmp`
+- prefix checks
+- separator checks
+- direct character comparisons
+- validation function analysis
+
+Lab folder:
+
+```text
+labs/07-license-key-pattern/
+```
+
+---
+
+### Lab 08 - Switch Case Control Flow
+
+This lab demonstrates how switch-case style control flow appears inside a compiled binary.
+
+Main concepts:
+
+- menu-based options
+- `atoi`
+- numeric input conversion
+- switch-case logic
+- branch reconstruction
+- default case behavior
+- Ghidra control flow analysis
+
+Lab folder:
+
+```text
+labs/08-switch-case-control-flow/
+```
+
+---
+
+### Lab 09 - Checksum Validation
+
+This lab demonstrates how input validation can be performed with a checksum calculation instead of a direct string comparison.
+
+Main concepts:
+
+- loop-based validation
+- ASCII values
+- checksum calculation
+- `sum += input[i]`
+- comparison against a constant
+- hexadecimal constants in Ghidra
+- `strlen` restriction
+
+Lab folder:
+
+```text
+labs/09-checksum-validation/
+```
+
+---
+
+### Lab 10 - Encoded API Message
+
+This lab combines encoded string recovery with Windows API behavior analysis.
+
+Main concepts:
+
+- XOR encoded message
+- runtime decoding
+- decode loop
+- local decoded buffer
+- `MessageBoxA`
+- Windows API import analysis
+- runtime output verification
+
+Lab folder:
+
+```text
+labs/10-encoded-api-message/
+```
+
+---
+
 ## Repository Structure
 
 ```text
@@ -152,36 +265,61 @@ ReverseLogic-Lab/
 │
 ├── README.md
 │
-├── labs/
-│   │
-│   ├── 01-simple-password/
-│   │   ├── source.c
-│   │   ├── analysis.md
-│   │   └── screenshots/
-│   │
-│   ├── 02-xor-encoded-string/
-│   │   ├── source.c
-│   │   ├── analysis.md
-│   │   └── screenshots/
-│   │
-│   ├── 03-stack-strings/
-│   │   ├── source.c
-│   │   ├── analysis.md
-│   │   └── screenshots/
-│   │
-│   ├── 04-anti-debugging/
-│   │   ├── source.c
-│   │   ├── analysis.md
-│   │   └── screenshots/
-│   │
-│   └── 05-windows-api-behavior/
-│       ├── source.c
-│       ├── analysis.md
-│       └── screenshots/
+├── docs/
 │
 ├── tools/
 │
-└── docs/
+└── labs/
+    │
+    ├── 01-simple-password/
+    │   ├── source.c
+    │   ├── analysis.md
+    │   └── screenshots/
+    │
+    ├── 02-xor-encoded-string/
+    │   ├── source.c
+    │   ├── analysis.md
+    │   └── screenshots/
+    │
+    ├── 03-stack-strings/
+    │   ├── source.c
+    │   ├── analysis.md
+    │   └── screenshots/
+    │
+    ├── 04-anti-debugging/
+    │   ├── source.c
+    │   ├── analysis.md
+    │   └── screenshots/
+    │
+    ├── 05-windows-api-behavior/
+    │   ├── source.c
+    │   ├── analysis.md
+    │   └── screenshots/
+    │
+    ├── 06-command-line-password/
+    │   ├── source.c
+    │   ├── analysis.md
+    │   └── screenshots/
+    │
+    ├── 07-license-key-pattern/
+    │   ├── source.c
+    │   ├── analysis.md
+    │   └── screenshots/
+    │
+    ├── 08-switch-case-control-flow/
+    │   ├── source.c
+    │   ├── analysis.md
+    │   └── screenshots/
+    │
+    ├── 09-checksum-validation/
+    │   ├── source.c
+    │   ├── analysis.md
+    │   └── screenshots/
+    │
+    └── 10-encoded-api-message/
+        ├── source.c
+        ├── analysis.md
+        └── screenshots/
 ```
 
 Compiled `.exe` files are not tracked in Git. They are ignored through `.gitignore`.
@@ -197,7 +335,7 @@ The workflow used in this repository is:
 3. Run the program and capture runtime behavior.
 4. Open the executable in Ghidra.
 5. Run auto-analysis.
-6. Inspect strings, functions, imports, and control flow.
+6. Inspect strings, functions, imports, arguments, and control flow.
 7. Compare source logic with decompiled logic.
 8. Capture screenshots.
 9. Write an analysis document.
@@ -212,13 +350,13 @@ Each lab can be built with GCC through MSYS2 MinGW64.
 Example:
 
 ```bash
-gcc -Wall -Wextra -O0 -g labs/05-windows-api-behavior/source.c -o labs/05-windows-api-behavior/windows_api_behavior.exe
+gcc -Wall -Wextra -O0 -g labs/10-encoded-api-message/source.c -o labs/10-encoded-api-message/encoded_api_message.exe -luser32
 ```
 
 Run example:
 
 ```bash
-./labs/05-windows-api-behavior/windows_api_behavior.exe
+./labs/10-encoded-api-message/encoded_api_message.exe
 ```
 
 The exact executable name changes depending on the lab.
@@ -237,12 +375,53 @@ This repository currently covers:
 - stack strings
 - local buffers
 - ASCII and hex character values
+- command-line arguments
+- `argc` and `argv`
+- usage messages
+- fixed license key validation
+- `strlen`
+- `strncmp`
+- direct character comparisons
+- switch-case control flow
+- `atoi`
+- branch reconstruction
+- checksum validation
+- loop-based arithmetic validation
 - Windows API imports
 - `IsDebuggerPresent`
+- `MessageBoxA`
+- `GetComputerNameA`
+- `GetWindowsDirectoryA`
+- `GetSystemDirectoryA`
+- `GetCurrentProcessId`
 - basic anti-debugging behavior
 - behavior analysis through imported APIs
 - Ghidra decompiler analysis
 - x64dbg runtime inspection
+
+---
+
+## Completed Pull Requests
+
+The project was developed through pull requests instead of direct commits to `main`.
+
+Completed work includes:
+
+```text
+PR #1  - feat: add xor encoded string lab
+PR #2  - docs: add xor dynamic analysis
+PR #3  - feat: add stack strings lab
+PR #4  - feat: add anti-debugging lab
+PR #5  - feat: add windows api behavior lab
+PR #6  - docs: update reverse logic lab readme
+PR #7  - feat: add command line password lab
+PR #8  - feat: add license key pattern lab
+PR #9  - feat: add switch case control flow lab
+PR #10 - feat: add checksum validation lab
+PR #11 - feat: add encoded api message lab
+```
+
+Pull request numbers may change if additional documentation updates are merged.
 
 ---
 
@@ -257,6 +436,7 @@ It focuses on:
 - identifying string references
 - recognizing simple control flow
 - analyzing imported APIs
+- understanding basic anti-analysis logic
 - documenting reverse engineering findings clearly
 
 This project does not target real commercial software and does not include illegal cracking activity.
@@ -273,9 +453,16 @@ Lab 02 completed
 Lab 03 completed
 Lab 04 completed
 Lab 05 completed
+Lab 06 completed
+Lab 07 completed
+Lab 08 completed
+Lab 09 completed
+Lab 10 completed
 ```
 
-More labs will be added as the reverse engineering roadmap progresses.
+ReverseLogic-Lab foundation phase is completed.
+
+Future work may continue with more advanced malware analysis topics such as PE structure, API hooking, process injection, unpacking basics, persistence techniques, and dynamic analysis reports.
 
 ---
 
@@ -296,5 +483,6 @@ Examples:
 ```text
 feat: add stack strings lab
 docs: add xor dynamic analysis
-docs: update reverse logic lab readme
+fix: improve documentation wording
+docs: finalize reverse logic lab documentation
 ```
