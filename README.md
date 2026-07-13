@@ -10,7 +10,6 @@ Source Code -> Compiled Binary -> Runtime Test -> Ghidra Analysis -> Documentati
 
 <div align="center">
   
-# 🚨 WARNING 🚨
 **🔴 PLEASE USE GHIDRA AND X64DBG TOOLS FOR EDUCATIONAL PURPOSES ONLY. 🔴**
 
 </div>
